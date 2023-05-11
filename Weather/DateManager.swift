@@ -16,4 +16,15 @@ struct DateManager {
         dateFormatter.dateFormat = "EEEE, d MMMM"
         return dateFormatter.string(from: currentDate)
     }
+    
+    
+    func formatDate(timestamp: TimeInterval) -> String {
+        let date = Date(timeIntervalSince1970: timestamp)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM"
+        let formattedDate = dateFormatter.string(from: date)
+        
+        return formattedDate
+    }
 }
