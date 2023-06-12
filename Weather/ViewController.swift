@@ -8,7 +8,7 @@
 import UIKit
 import CoreLocation
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CLLocationManagerDelegate {
     
     // MARK: - Properties
     private let api = WeatherAPI()
@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     private let weatherForCityViewModel = WeatherViewModel()
     private let forecastViewModel = ForecastWeatherViewModel()
     private let currentWeatherViewModel = WeatherLocationViewModel()
-    private let locationManager = CLLocationManager()
+    private let locationManager = LocationManager()
     
     // MARK: - Outlets
     @IBOutlet weak var cityNameLabel: UILabel!
@@ -32,51 +32,24 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        locationManager.requestLocation()
         
         gradient.makeGradient(view: self.view)
-        //weatherForCityViewModel.getWeatherForCityToDay()
         forecastViewModel.getForecastWeatherForCity()
         updateUI()
     }
     
-    // MARK: - Location functions
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            let latitude = location.coordinate.latitude
-            let longitude = location.coordinate.longitude
-            
-            print("Latitude: \(latitude), Longitude: \(longitude)")
-            currentWeatherViewModel.getWeatherWithCurrentLocation(lon: longitude, lat: latitude)
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedWhenInUse {
-            locationManager.startUpdatingLocation()
-        } else {
-            locationManager.stopUpdatingLocation()
-            // Виконати додаткові дії для обробки відмови в доступі до локації
-        }
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location manager failed with error: \(error.localizedDescription)")
-        // Виконати додаткові дії для обробки помилки
-    }
-    
     // MARK: - Setup UI
-//    private func setupUI() {
-//        guard let weather       = weatherForCityViewModel.cityWeather else { return }
-//        cityNameLabel.text      = weather.name
-//        weatherLabel.text       = weather.weather.first?.description.capitalized
-//        temperatureLabel.text   = Int(weather.main.temp).description + "°"
-//        datelabel.text          = DateManager().getDate()
-//        guard let icon          = weather.weather.first?.icon else { return }
-//        weatherImageView.image  = ImageManager.getImage(for: icon)
-//        //setupBackground()
-//    }
+    //    private func setupUI() {
+    //        guard let weather       = weatherForCityViewModel.cityWeather else { return }
+    //        cityNameLabel.text      = weather.name
+    //        weatherLabel.text       = weather.weather.first?.description.capitalized
+    //        temperatureLabel.text   = Int(weather.main.temp).description + "°"
+    //        datelabel.text          = DateManager().getDate()
+    //        guard let icon          = weather.weather.first?.icon else { return }
+    //        weatherImageView.image  = ImageManager.getImage(for: icon)
+    //        //setupBackground()
+    //    }
     
     
     private func setupUI() {
@@ -136,9 +109,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 // MARK: - CLLocationManagerDelegate
-
-extension ViewController: CLLocationManagerDelegate {
+extension ViewController: LocationManagerDelegate {
+    func didUpdateLocation(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
+        // Ваш код для обробки отриманої локації
+        currentWeatherViewModel.getWeatherForLocation(lon: longitude, lat: latitude)
+    }
     
+    func didFailWithError(error: Error) {
+        // Обробка помилки локації
+    }
 }
 
 

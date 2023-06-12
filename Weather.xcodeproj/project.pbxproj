@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		ABBF38532A373F69007D3327 /* WeatherLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBF38522A373F69007D3327 /* WeatherLocationViewModel.swift */; };
+		AB12EE962A37C2E8002F4372 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB12EE952A37C2E8002F4372 /* LocationManager.swift */; };
+		AB12EE982A37C5E5002F4372 /* WeatherLocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB12EE972A37C5E5002F4372 /* WeatherLocationViewModel.swift */; };
 		ABBF38552A374737007D3327 /* CurrentWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABBF38542A374737007D3327 /* CurrentWeather.swift */; };
 		ABFA957B2A0BA39B003C56DB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABFA957A2A0BA39B003C56DB /* AppDelegate.swift */; };
 		ABFA957D2A0BA39B003C56DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABFA957C2A0BA39B003C56DB /* SceneDelegate.swift */; };
@@ -30,7 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		ABBF38522A373F69007D3327 /* WeatherLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLocationViewModel.swift; sourceTree = "<group>"; };
+		AB12EE952A37C2E8002F4372 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		AB12EE972A37C5E5002F4372 /* WeatherLocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLocationViewModel.swift; sourceTree = "<group>"; };
 		ABBF38542A374737007D3327 /* CurrentWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeather.swift; sourceTree = "<group>"; };
 		ABFA95772A0BA39B003C56DB /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABFA957A2A0BA39B003C56DB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -114,8 +116,8 @@
 			isa = PBXGroup;
 			children = (
 				ABFA95A32A0D7679003C56DB /* WeatherViewModel.swift */,
-				ABBF38522A373F69007D3327 /* WeatherLocationViewModel.swift */,
 				ABFA95A82A0D8DC5003C56DB /* ForecastWeatherViewModel.swift */,
+				AB12EE972A37C5E5002F4372 /* WeatherLocationViewModel.swift */,
 			);
 			name = ViewModels;
 			sourceTree = "<group>";
@@ -136,6 +138,7 @@
 				ABFA95AA2A0E473F003C56DB /* GradientManager.swift */,
 				ABFA95982A0BE358003C56DB /* ImageManager.swift */,
 				ABFA959A2A0BEBDE003C56DB /* DateManager.swift */,
+				AB12EE952A37C2E8002F4372 /* LocationManager.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -221,10 +224,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABFA959E2A0C400B003C56DB /* String+DateTransformer.swift in Sources */,
+				AB12EE962A37C2E8002F4372 /* LocationManager.swift in Sources */,
 				ABFA95A62A0D7DF3003C56DB /* String+AsURL.swift in Sources */,
 				ABFA957B2A0BA39B003C56DB /* AppDelegate.swift in Sources */,
 				ABFA95992A0BE358003C56DB /* ImageManager.swift in Sources */,
 				ABFA95A42A0D7679003C56DB /* WeatherViewModel.swift in Sources */,
+				AB12EE982A37C5E5002F4372 /* WeatherLocationViewModel.swift in Sources */,
 				ABFA95932A0BA510003C56DB /* WeatheAPI.swift in Sources */,
 				ABFA95AB2A0E473F003C56DB /* GradientManager.swift in Sources */,
 				ABFA95A02A0CE927003C56DB /* ForecastWeather.swift in Sources */,
@@ -235,7 +240,6 @@
 				ABFA95A22A0CEFF4003C56DB /* ForecastTableViewCell.swift in Sources */,
 				ABFA957D2A0BA39B003C56DB /* SceneDelegate.swift in Sources */,
 				ABFA95A92A0D8DC5003C56DB /* ForecastWeatherViewModel.swift in Sources */,
-				ABBF38532A373F69007D3327 /* WeatherLocationViewModel.swift in Sources */,
 				ABFA95952A0BA877003C56DB /* CityWeather.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
