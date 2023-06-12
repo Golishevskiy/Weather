@@ -21,12 +21,11 @@ class ForecastTableViewCell: UITableViewCell {
         dayTempLabel.text = maxTemp
         nightTempLabel.text = minTemp
         dateLabel.text = date
+        print(maxTemp)
     }
     
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
 }

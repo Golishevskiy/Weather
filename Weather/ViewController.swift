@@ -6,20 +6,17 @@
 //
 
 import UIKit
+import CoreLocation
 
 class ViewController: UIViewController {
     
-    
     // MARK: - Properties
     private let api = WeatherAPI()
+    private let gradient = GradientManager()
     private let weatherForCityViewModel = WeatherViewModel()
     private let forecastViewModel = ForecastWeatherViewModel()
-
-    
-    private lazy var list: [List] = {
-        guard let list = forecastViewModel.listForecasts else { return [List]() }
-        return list
-    }()
+    private let currentWeatherViewModel = WeatherLocationViewModel()
+    private let locationManager = CLLocationManager()
     
     // MARK: - Outlets
     @IBOutlet weak var cityNameLabel: UILabel!
@@ -34,11 +31,66 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        GradientManager.applyGradient(view: self.view, gradientType: .blueToYellow)
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
         
-        weatherForCityViewModel.getWeatherForCityToDay()
+        gradient.makeGradient(view: self.view)
+        //weatherForCityViewModel.getWeatherForCityToDay()
         forecastViewModel.getForecastWeatherForCity()
-        
+        updateUI()
+    }
+    
+    // MARK: - Location functions
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            let latitude = location.coordinate.latitude
+            let longitude = location.coordinate.longitude
+            
+            print("Latitude: \(latitude), Longitude: \(longitude)")
+            currentWeatherViewModel.getWeatherWithCurrentLocation(lon: longitude, lat: latitude)
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            locationManager.startUpdatingLocation()
+        } else {
+            locationManager.stopUpdatingLocation()
+            // Виконати додаткові дії для обробки відмови в доступі до локації
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Location manager failed with error: \(error.localizedDescription)")
+        // Виконати додаткові дії для обробки помилки
+    }
+    
+    // MARK: - Setup UI
+//    private func setupUI() {
+//        guard let weather       = weatherForCityViewModel.cityWeather else { return }
+//        cityNameLabel.text      = weather.name
+//        weatherLabel.text       = weather.weather.first?.description.capitalized
+//        temperatureLabel.text   = Int(weather.main.temp).description + "°"
+//        datelabel.text          = DateManager().getDate()
+//        guard let icon          = weather.weather.first?.icon else { return }
+//        weatherImageView.image  = ImageManager.getImage(for: icon)
+//        //setupBackground()
+//    }
+    
+    
+    private func setupUI() {
+        guard let weather       = currentWeatherViewModel.weather else { return }
+        cityNameLabel.text      = weather.name
+        weatherLabel.text       = weather.weather.first?.description.capitalized
+        temperatureLabel.text   = Int(weather.main.temp).description + "°"
+        datelabel.text          = DateManager().getDate()
+        guard let icon          = weather.weather.first?.icon else { return }
+        weatherImageView.image  = ImageManager.getImage(for: icon)
+        //setupBackground()
+    }
+    
+    private func updateUI() {
         forecastViewModel.onUpdate = { [weak self] in
             DispatchQueue.main.async {
                 self?.tableView.reloadData()
@@ -50,47 +102,43 @@ class ViewController: UIViewController {
                 self?.setupUI()
             }
         }
+        
+        currentWeatherViewModel.onUpdate = { [weak self] in
+            DispatchQueue.main.async {
+                self?.setupUI()
+            }
+        }
     }
-    
-    private func setupUI() {
-        guard let weather = weatherForCityViewModel.cityWeather else { return }
-        cityNameLabel.text      = weather.name
-        weatherLabel.text       = weather.weather.first?.main
-        temperatureLabel.text   = Int(weather.main.temp).description + "°"
-        datelabel.text          = DateManager().getDate()
-        guard let icon          = weather.weather.first?.icon else { return }
-        weatherImageView.image  = ImageManager.getImage(for: icon)
-        //setupBackground()
-    }
-    
-//    private func setupBackground() {
-//        if listForecast[0].sys.pod.rawValue == "n" {
-//            GradientManager.applyGradient(view: self.view, gradientType: .purpleToPink)
-//        } else {
-//            GradientManager.applyGradient(view: self.view, gradientType: .blueToYellow)
-//        }
-//    }
 }
 
 
-// MARK: - Extension
+// MARK: - UITableViewDataSource
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let list = forecastViewModel.listForecasts else { return 0 }
-        return list.count
+        return forecastViewModel.listForecasts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ForecastTableViewCell
-        guard let list = forecastViewModel.listForecasts else { return UITableViewCell() }
-        guard let icon = list[indexPath.row].weather.first?.icon else { print("✏️ icon is nil"); return UITableViewCell() }
+        let forecast = forecastViewModel.listForecasts[indexPath.row]
+        //        guard let icon = forecast.icon else { print("✏️ icon is nil"); return UITableViewCell() }
         
-        cell.setup(date: DateManager().formatDate(timestamp: TimeInterval(list[indexPath.row].dt)),
-                   icon: icon,
-                   maxTemp: Int(list[indexPath.row].main.tempMax).description,
-                   minTemp: Int(list[indexPath.row].main.tempMax).description)
+        cell.setup(date: forecast.date,
+                   icon: forecast.icon,
+                   maxTemp: forecast.tempDay.description,
+                   minTemp: forecast.tempNight.description)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50.0
+    }
+}
+
+// MARK: - CLLocationManagerDelegate
+
+extension ViewController: CLLocationManagerDelegate {
+    
 }
 
 

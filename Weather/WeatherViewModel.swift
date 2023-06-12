@@ -12,7 +12,7 @@ class WeatherViewModel {
     // MARK: - Property
     var api = WeatherAPI.shared
     var onUpdate: (() -> Void)?
-    var cityWeather: CityWeather? {
+    var cityWeather: CityWeather! {
         didSet {
             onUpdate?()
         }
@@ -27,7 +27,8 @@ class WeatherViewModel {
         api.performRequest(url: url,
                            queryParams: ["q"    : "Kyiv",
                                          "appid": "1c68f23403f917358bfdf46f21f13047",
-                                         "units": "metric"],
+                                         "units": "metric",
+                                         "lang": "uk"],
                            responseType: CityWeather.self) { [weak self] result, err in
             if let error = err {
                 print(error)
