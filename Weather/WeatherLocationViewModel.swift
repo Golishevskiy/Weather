@@ -32,9 +32,12 @@ class WeatherLocationViewModel {
                                          "units": "metric",
                                          "lang" : "uk"],
                            responseType: CurrentWeather.self) { res, err in
-            print(res)
-            self.weather = res
-            
+            if err != nil {
+                print(err?.localizedDescription)
+                print("❌ function \(#function)")
+            } else  {
+                self.weather = res
+            }
         }
     }
 }

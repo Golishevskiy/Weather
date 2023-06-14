@@ -16,12 +16,9 @@ class GradientManager {
     
     
     func makeGradient(view: UIView) {
-        print(dataManager.getCurrentHour())
         if dataManager.getCurrentHour() > 7 && dataManager.getCurrentHour() < 20 {
             self.gradientMaker.applyGradient(view: view, gradientType: .blueToYellow)
-        }
-        
-        if dataManager.getCurrentHour() > 20 || dataManager.getCurrentHour() < 7 {
+        } else {
             self.gradientMaker.applyGradient(view: view, gradientType: .purpleToPink)
         }
     }

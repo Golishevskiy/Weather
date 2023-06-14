@@ -45,7 +45,6 @@ struct MainInfo: Codable {
 
 // MARK: - Sys
 struct SysInfo: Codable {
-    let type, id: Int
     let country: String
     let sunrise, sunset: Int
 }

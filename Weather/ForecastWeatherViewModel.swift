@@ -33,7 +33,6 @@ class ForecastWeatherViewModel {
                                          "lang" : "uk"],
                            responseType: ForecastWeather.self) { res, err in
             guard let list = res?.list else { print("✏️The list is nil"); return}
-            print(res)
             self.listForecasts = self.prepareData(array:self.createTwoArrays(list: list))
         }
     }

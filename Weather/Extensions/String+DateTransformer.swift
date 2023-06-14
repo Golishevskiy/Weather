@@ -18,7 +18,6 @@ extension String {
         
         dateFormatter.dateFormat = "dd MMMM"
         let transformedDate = dateFormatter.string(from: date)
-        
         return transformedDate
     }
 }

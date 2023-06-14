@@ -11,12 +11,13 @@ import CoreLocation
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
     // MARK: - Properties
-    private let api = WeatherAPI()
-    private let gradient = GradientManager()
-    private let weatherForCityViewModel = WeatherViewModel()
-    private let forecastViewModel = ForecastWeatherViewModel()
+    private let api                     = WeatherAPI()
+    private let gradient                = GradientManager()
+//    private let weatherForCityViewModel = WeatherViewModel()
+    private let forecastViewModel       = ForecastWeatherViewModel()
     private let currentWeatherViewModel = WeatherLocationViewModel()
-    private let locationManager = LocationManager()
+    private let locationManager         = LocationManager()
+    private let dataManager             = DateManager()
     
     // MARK: - Outlets
     @IBOutlet weak var cityNameLabel: UILabel!
@@ -25,6 +26,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var weatherImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var sunriseLabel: UILabel!
+    @IBOutlet weak var sunsetLabel: UILabel!
     
     
     // MARK: - LifeCycle
@@ -40,18 +43,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     // MARK: - Setup UI
-    //    private func setupUI() {
-    //        guard let weather       = weatherForCityViewModel.cityWeather else { return }
-    //        cityNameLabel.text      = weather.name
-    //        weatherLabel.text       = weather.weather.first?.description.capitalized
-    //        temperatureLabel.text   = Int(weather.main.temp).description + "°"
-    //        datelabel.text          = DateManager().getDate()
-    //        guard let icon          = weather.weather.first?.icon else { return }
-    //        weatherImageView.image  = ImageManager.getImage(for: icon)
-    //        //setupBackground()
-    //    }
-    
-    
     private func setupUI() {
         guard let weather       = currentWeatherViewModel.weather else { return }
         cityNameLabel.text      = weather.name
@@ -60,7 +51,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         datelabel.text          = DateManager().getDate()
         guard let icon          = weather.weather.first?.icon else { return }
         weatherImageView.image  = ImageManager.getImage(for: icon)
-        //setupBackground()
+        sunriseLabel.text       = dataManager.formatTimeToHH_MM(timestamp: Double(weather.sys.sunrise))
+        sunsetLabel.text        = dataManager.formatTimeToHH_MM(timestamp: Double(weather.sys.sunset))
     }
     
     private func updateUI() {
@@ -70,11 +62,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             }
         }
         
-        weatherForCityViewModel.onUpdate = { [weak self] in
-            DispatchQueue.main.async {
-                self?.setupUI()
-            }
-        }
+//        weatherForCityViewModel.onUpdate = { [weak self] in
+//            DispatchQueue.main.async {
+//                self?.setupUI()
+//            }
+//        }
         
         currentWeatherViewModel.onUpdate = { [weak self] in
             DispatchQueue.main.async {
@@ -94,7 +86,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ForecastTableViewCell
         let forecast = forecastViewModel.listForecasts[indexPath.row]
-        //        guard let icon = forecast.icon else { print("✏️ icon is nil"); return UITableViewCell() }
         
         cell.setup(date: forecast.date,
                    icon: forecast.icon,
