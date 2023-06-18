@@ -22,8 +22,9 @@ struct ImageManager {
         case "11d": imageName = "storm"
         case "13d": imageName = "snowy"
         case "50d": imageName = "foog"
+        case "04n": imageName = "cloud+moon"
         default:
-            imageName = "cloud+moon"
+            imageName = "sun"
             print("🆘 there is no image named - \(icon)")
         }
         

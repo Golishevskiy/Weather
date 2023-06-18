@@ -48,10 +48,10 @@ struct DateManager {
         return formattedTime
     }
     
-    func formatTimeToHH_MM(timestamp: TimeInterval) -> String {
+    func formatTimeToHHMM(timestamp: TimeInterval) -> String {
         let date = Date(timeIntervalSince1970: timestamp)
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH : MM"
+        dateFormatter.dateFormat = "HH:MM"
         let formattedTime = dateFormatter.string(from: date)
         return formattedTime
     }

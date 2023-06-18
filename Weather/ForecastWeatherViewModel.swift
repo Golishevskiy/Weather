@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import CoreLocation
 
 class ForecastWeatherViewModel {
     
@@ -21,13 +21,14 @@ class ForecastWeatherViewModel {
     }
     
     // MARK: - Functions
-    func getForecastWeatherForCity() {
+    func getForecastWeatherForCity(lon: CLLocationDegrees, lat: CLLocationDegrees) {
         guard let url = "https://api.openweathermap.org/data/2.5/forecast".asURL() else {
             print("❌ function \(#function) can't make url")
             return
         }
         api.performRequest(url: url,
-                           queryParams: ["q"    : "Kyiv",
+                           queryParams: ["lon"  : lon,
+                                         "lat"  : lat,
                                          "appid": "1c68f23403f917358bfdf46f21f13047",
                                          "units": "metric",
                                          "lang" : "uk"],

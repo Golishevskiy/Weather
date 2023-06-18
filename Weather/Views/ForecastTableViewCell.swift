@@ -21,7 +21,6 @@ class ForecastTableViewCell: UITableViewCell {
         dayTempLabel.text = maxTemp
         nightTempLabel.text = minTemp
         dateLabel.text = date
-        print(maxTemp)
     }
     
 
